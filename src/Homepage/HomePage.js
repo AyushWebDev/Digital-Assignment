@@ -8,7 +8,11 @@ class HomePage extends React.Component{
         this.state={
            data: {
                videosData: []
-           }
+              
+           },
+           tag: "",
+           comp: false,
+           all: true
         }
     }
 
@@ -22,6 +26,24 @@ class HomePage extends React.Component{
                   data: data
               })
           })
+    }
+
+    handleClick=t=>event=>{
+        event.preventDefault();
+        this.setState({
+            comp: true,
+            tag: t,
+            all: false
+        })
+    }
+
+    showAll=event=>{
+        event.preventDefault();
+        this.setState({
+            all: true,
+            comp: false,
+            tag: ""
+        })
     }
 
     render(){        
@@ -38,10 +60,10 @@ class HomePage extends React.Component{
                     </p>
                    
                     <nav style={{textAlign: "center"}}>
-                    <a href="/html/" className="btn btn-success" style={{fontSize: "18px", marginRight: "20px"}}>Favourites</a> 
-                    <a href="/css/" className="btn btn-success" style={{fontSize: "18px", marginRight: "20px"}}>Resp. Devices</a> 
-                    <a href="/js/" className="btn btn-success" style={{fontSize: "18px", marginRight: "20px"}}>CT Scans</a> 
-                    <a href="/python/" className="btn btn-success" style={{fontSize: "18px", marginRight: "20px"}}>Neurology</a>
+                    <a href="#" className="btn btn-success" style={{fontSize: "18px", marginRight: "20px"}} onClick={this.showAll}>Favourites</a> 
+                    <a href="#" className="btn btn-success" style={{fontSize: "18px", marginRight: "20px"}} onClick={this.handleClick("tb")}>Resp. Devices</a> 
+                    <a href="#" className="btn btn-success" style={{fontSize: "18px", marginRight: "20px"}} onClick={this.handleClick("cancer")}>CT Scans</a> 
+                    <a href="#" className="btn btn-success" style={{fontSize: "18px", marginRight: "20px"}} onClick={this.handleClick("copd")}>Neurology</a>
                     </nav>
                    
                 </div>
@@ -51,6 +73,7 @@ class HomePage extends React.Component{
                
                 <div class="container">
                     <div>
+                        {this.state.all &&
                         <div className="row">
                             {this.state.data.videosData.map((obj,key)=>(
                                 <>
@@ -62,6 +85,20 @@ class HomePage extends React.Component{
                                 </>
                             ))}
                         </div>
+                        }
+                         {this.state.comp &&
+                        <div className="row">
+                            {this.state.data.videosData.filter(obj=>obj.tags.includes(this.state.tag)).map((obj,key)=>(
+                                <>
+                               <div style={{backgroundImage: `url(${obj.thumbnailUrl})`,width: "25rem",backgroundSize: "25rem",margin: "20px",marginBottom: "20px",marginRight: "20px"}} className="col-md-2">
+                                    <h4 style={{padding: "30px 30px"}}>{obj.title}</h4>
+                                    <a href={obj.videolink} className="btn btn-primary" style={{}}>Video</a>
+                                </div>
+                                
+                                </>
+                            ))}
+                        </div>
+                        }
                         
                     </div>
                 </div>
